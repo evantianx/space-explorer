@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: space_db
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres1
+      POSTGRES_PASSWORD: postgres1
+      POSTGRES_DB: space_db
