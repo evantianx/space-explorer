@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './database.config';
+import { LaunchModule } from './launch/launch.module';
 
 const lib = join(process.cwd(), LIB_PATH);
 
@@ -27,6 +28,7 @@ const lib = join(process.cwd(), LIB_PATH);
       imports: [ConfigModule],
       useClass: DatabaseConfig,
     }),
+    LaunchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
