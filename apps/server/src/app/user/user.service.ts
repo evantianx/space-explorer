@@ -27,4 +27,54 @@ export class UserService {
   getUserByEmail(email: string) {
     return this.userRepo.findOne({ email });
   }
+
+  private createTripUpdateError(message: string, launches: number[]) {
+    return { success: false, message, launches };
+  }
+
+  async addTrips(ids: number[], email: string) {
+    try {
+      const user = await this.getUserByEmail(email);
+      const totalTrips = user.trips ? user.trips.concat(ids) : ids;
+      user.trips = Array.from(new Set(totalTrips));
+
+      await user.save();
+
+      return {
+        success: true,
+        message: `Successfully added trips with ids: ${ids.join(',')}`,
+        launches: ids,
+      };
+    } catch (err) {
+      return this.createTripUpdateError(`Error: ${err}`, ids);
+    }
+  }
+
+  async hasTrip(id: number, email: string) {
+    const user = await this.getUserByEmail(email);
+    return user.trips.includes(id);
+  }
+
+  async removeTrips(id: number, email: string) {
+    try {
+      const user = await this.getUserByEmail(email);
+      console.log(user.trips, id);
+      if (!user.trips.includes(id)) {
+        return this.createTripUpdateError(
+          'Cannot cancel trip that not booked',
+          [id]
+        );
+      }
+      user.trips = user.trips.filter((t) => t !== id);
+      await user.save();
+
+      return {
+        success: true,
+        message: `Successfully added trips with ids: ${id}`,
+        launches: [id],
+      };
+    } catch (err) {
+      return this.createTripUpdateError(`Err: ${err}`, [id]);
+    }
+  }
 }
