@@ -9,6 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './database.config';
 import { LaunchModule } from './launch/launch.module';
+import { UserModule } from './user/user.module';
 
 const lib = join(process.cwd(), LIB_PATH);
 
@@ -23,12 +24,14 @@ const lib = join(process.cwd(), LIB_PATH);
       definitions: {
         path: join(lib, 'lib/graphql.ts'),
       },
+      context: ({ req }) => ({ headers: req.headers }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: DatabaseConfig,
     }),
     LaunchModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

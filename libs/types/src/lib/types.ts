@@ -1,4 +1,5 @@
 import * as ServerSchema from '@space-explorer/graphql';
+export type UserModel = Omit<ServerSchema.User, 'trips'> | null;
 
 export interface LaunchModel
   extends Omit<ServerSchema.Launch, 'mission' | 'isBooked'> {
